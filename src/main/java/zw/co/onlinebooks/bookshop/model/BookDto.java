@@ -15,7 +15,7 @@ public class BookDto {
     private String description;
     private String title;
     private BigDecimal price;
-    private CategoryDto categoryDto;
+    private Long categoryId;
 }
 
 
