@@ -7,16 +7,20 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+import java.io.Serializable;
+
+
 
 @Entity
 @Table(name = "category")
 @Data
-public class Category {
+public class Category implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
-    private Long categoryId;
+    private Long id;
 
     @Column(name = "title")
     private String title;
+
 }
