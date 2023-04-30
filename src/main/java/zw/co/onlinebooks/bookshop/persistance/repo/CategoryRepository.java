@@ -6,4 +6,6 @@ import zw.co.onlinebooks.bookshop.persistance.entity.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+    Category findByTitle(String title);
+    Category findCategoryById(Long id);
 }
