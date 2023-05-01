@@ -30,7 +30,7 @@ public class BookController {
         return bookService.createBook(bookDto);
     }
 
-    @GetMapping("/bookd")
+    @GetMapping("/{bookId}")
     public Book getBook(@PathVariable Long bookId) throws BookException {
         return bookService.getBook(bookId);
     }
