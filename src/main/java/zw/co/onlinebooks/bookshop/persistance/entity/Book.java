@@ -28,7 +28,8 @@ public class Book {
 
     private BigDecimal price;
 
-    private Boolean is_Available = true;
+    @Column(name = "is_available")
+    private Boolean isAvailable;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
