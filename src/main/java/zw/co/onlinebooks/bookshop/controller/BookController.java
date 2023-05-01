@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import zw.co.onlinebooks.bookshop.exceptions.BookException;
 import zw.co.onlinebooks.bookshop.model.BookRequestDto;
+import zw.co.onlinebooks.bookshop.model.BookResponseDto;
 import zw.co.onlinebooks.bookshop.persistance.entity.Book;
 import zw.co.onlinebooks.bookshop.service.BookService;
 
@@ -26,32 +27,32 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public Book createBook(@RequestBody BookRequestDto bookRequestDto) {
+    public BookResponseDto createBook(@RequestBody BookRequestDto bookRequestDto) {
         return bookService.createBook(bookRequestDto);
     }
 
     @GetMapping("/{bookId}")
-    public Book getBook(@PathVariable Long bookId) throws BookException {
-        return bookService.getBook(bookId);
+    public BookResponseDto getBook(@PathVariable Long bookId) throws BookException {
+        return bookService.getBookById(bookId);
     }
 
     @GetMapping("/all")
-    public List<Book> getAllBooks() {
+    public List<BookResponseDto> getAllBooks() {
         return bookService.getAllBooks();
     }
 
     @GetMapping("/available")
-    public List<Book> getAvailableBooks() {
+    public List<BookResponseDto> getAvailableBooks() {
         return bookService.getAvailableBooks();
     }
 
     @PutMapping("/{bookId}")
-    public Book updateBook(@PathVariable Long bookId, @RequestBody BookRequestDto bookRequestDto) throws BookException {
+    public BookResponseDto updateBook(@PathVariable Long bookId, @RequestBody BookRequestDto bookRequestDto) throws BookException {
         return bookService.updateBook(bookId, bookRequestDto);
     }
 
     @DeleteMapping("/{bookId}")
-    public Book removeBook(@PathVariable Long bookId) throws BookException {
+    public BookResponseDto removeBook(@PathVariable Long bookId) throws BookException {
         return bookService.remove(bookId);
     }
 }

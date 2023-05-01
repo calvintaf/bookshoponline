@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import zw.co.onlinebooks.bookshop.exceptions.BookException;
+import zw.co.onlinebooks.bookshop.exceptions.CategoryException;
 import zw.co.onlinebooks.bookshop.model.CategoryRequestDto;
+import zw.co.onlinebooks.bookshop.model.CategoryResponseDto;
+import zw.co.onlinebooks.bookshop.persistance.entity.Book;
 import zw.co.onlinebooks.bookshop.persistance.entity.Category;
 import zw.co.onlinebooks.bookshop.service.CategoryService;
 
@@ -24,17 +28,22 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public Category createCategory(@RequestBody CategoryRequestDto categoryRequestDto) {
+    public CategoryResponseDto createCategory(@RequestBody CategoryRequestDto categoryRequestDto) {
         return categoryService.createCategory(categoryRequestDto);
     }
 
     @GetMapping
-    public List<Category> getAllCategories() {
+    public List<CategoryResponseDto> getAllCategories() {
         return categoryService.getAllCategories();
     }
 
+    @GetMapping("/{categoryId}")
+    public CategoryResponseDto getCategoryById(@PathVariable Long categoryId) throws CategoryException {
+        return categoryService.getCategoryById(categoryId);
+    }
+
     @PutMapping("/categoryId")
-    public Category updateCategory(@PathVariable Long categoryId, @RequestBody CategoryRequestDto categoryRequestDto) {
+    public CategoryResponseDto updateCategory(@PathVariable Long categoryId, @RequestBody CategoryRequestDto categoryRequestDto) {
         return categoryService.updateCategory(categoryId, categoryRequestDto.getTitle());
     }
 }
