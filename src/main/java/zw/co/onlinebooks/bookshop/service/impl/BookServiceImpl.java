@@ -26,7 +26,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book createBook(BookDto bookDto) {
-        log.info("Adding new Book: {}", bookDto);
+        /*log.info("Adding new Book: {}", bookDto);
 
         Category category = categoryRepository.findCategoryById(bookDto.getCategoryId());
         if (Objects.isNull(category)) {
@@ -40,7 +40,21 @@ public class BookServiceImpl implements BookService {
         book.setPrice(bookDto.getPrice());
         book.setTitle(bookDto.getTitle());
         book.setCategory(category);
-        return bookRepository.save(book);
+        return bookRepository.save(book);*/
+
+            // Create a new Book object with the given details
+            Book book = new Book();
+            book.setTitle(bookDto.getTitle());
+            book.setDescription(bookDto.getDescription());
+            book.setPrice(bookDto.getPrice());
+
+            // Find the Category entity with the given category ID (assuming you have a CategoryRepository)
+            Category category = categoryRepository.findById(bookDto.getCategoryId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
+            book.setCategory(category);
+
+            // Save the new book to the database
+            return bookRepository.save(book);
     }
 
     @Override
@@ -77,7 +91,7 @@ public class BookServiceImpl implements BookService {
             log.info(message);
             throw new BookException(message);
         }
-        removedBook.setIsAvailable(true);
+        removedBook.setIs_Available(false);
         return bookRepository.save(removedBook);
     }
 
