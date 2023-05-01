@@ -36,6 +36,11 @@ public class BookController {
         return bookService.getBookById(bookId);
     }
 
+    @GetMapping("/category/{categoryId}")
+    public List<BookResponseDto> getBooksByCategoryId(@PathVariable Long categoryId) throws BookException {
+        return bookService.getBooksByCategoryId(categoryId);
+    }
+
     @GetMapping("/all")
     public List<BookResponseDto> getAllBooks() {
         return bookService.getAllBooks();

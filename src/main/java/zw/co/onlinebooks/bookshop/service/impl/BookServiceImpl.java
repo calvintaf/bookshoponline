@@ -8,7 +8,6 @@ import zw.co.onlinebooks.bookshop.exceptions.BookException;
 import zw.co.onlinebooks.bookshop.exceptions.CategoryException;
 import zw.co.onlinebooks.bookshop.model.BookRequestDto;
 import zw.co.onlinebooks.bookshop.model.BookResponseDto;
-import zw.co.onlinebooks.bookshop.model.CategoryResponseDto;
 import zw.co.onlinebooks.bookshop.persistance.entity.Book;
 import zw.co.onlinebooks.bookshop.persistance.entity.Category;
 import zw.co.onlinebooks.bookshop.persistance.repo.BookRepository;
@@ -108,6 +107,20 @@ public class BookServiceImpl implements BookService {
         log.info("Getting all books");
 
         List<Book> books = bookRepository.findAll();
+        return books.stream()
+                .map(book -> modelMapper.map(book, BookResponseDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BookResponseDto> getBooksByCategoryId(Long categoryId) throws BookException {
+        log.info("Getting books with Category ID : " + categoryId);
+        List<Book> books = bookRepository.findAllByCategoryId(categoryId);
+        if (books.isEmpty()) {
+            String message = "Books with Category ID: " + categoryId + " not found";
+            log.info(message);
+            throw new BookException(message);
+        }
         return books.stream()
                 .map(book -> modelMapper.map(book, BookResponseDto.class))
                 .collect(Collectors.toList());

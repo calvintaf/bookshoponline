@@ -11,4 +11,5 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByIsAvailable(Boolean isAvailable);
     Book findBookById(Long id);
+    List<Book> findAllByCategoryId(Long categoryId);
 }

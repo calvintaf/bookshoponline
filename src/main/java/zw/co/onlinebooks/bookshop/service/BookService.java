@@ -18,5 +18,7 @@ public interface BookService {
 
     List<BookResponseDto> getAllBooks();
 
+    List<BookResponseDto> getBooksByCategoryId(Long categoryId) throws BookException;
+
     List<BookResponseDto> getAvailableBooks();
 }
