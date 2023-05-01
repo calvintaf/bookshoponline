@@ -2,6 +2,8 @@ package zw.co.onlinebooks.bookshop.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,22 +30,22 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public CategoryResponseDto createCategory(@RequestBody CategoryRequestDto categoryRequestDto) {
-        return categoryService.createCategory(categoryRequestDto);
+    public ResponseEntity<CategoryResponseDto> createCategory(@RequestBody CategoryRequestDto categoryRequestDto) {
+        return new ResponseEntity<>(categoryService.createCategory(categoryRequestDto), HttpStatus.OK);
     }
 
     @GetMapping
-    public List<CategoryResponseDto> getAllCategories() {
-        return categoryService.getAllCategories();
+    public ResponseEntity<List<CategoryResponseDto>> getAllCategories() {
+        return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
     @GetMapping("/{categoryId}")
-    public CategoryResponseDto getCategoryById(@PathVariable Long categoryId) throws CategoryException {
-        return categoryService.getCategoryById(categoryId);
+    public ResponseEntity<CategoryResponseDto> getCategoryById(@PathVariable Long categoryId) throws CategoryException {
+        return new ResponseEntity<>(categoryService.getCategoryById(categoryId), HttpStatus.OK);
     }
 
     @PutMapping("/categoryId")
-    public CategoryResponseDto updateCategory(@PathVariable Long categoryId, @RequestBody CategoryRequestDto categoryRequestDto) {
-        return categoryService.updateCategory(categoryId, categoryRequestDto.getTitle());
+    public ResponseEntity<CategoryResponseDto> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryRequestDto categoryRequestDto) {
+        return new ResponseEntity<>(categoryService.updateCategory(categoryId, categoryRequestDto.getTitle()), HttpStatus.OK);
     }
 }
