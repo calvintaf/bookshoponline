@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import zw.co.onlinebooks.bookshop.exceptions.BookException;
 import zw.co.onlinebooks.bookshop.exceptions.CategoryException;
-import zw.co.onlinebooks.bookshop.model.BookDto;
+import zw.co.onlinebooks.bookshop.model.BookRequestDto;
 import zw.co.onlinebooks.bookshop.persistance.entity.Book;
 import zw.co.onlinebooks.bookshop.persistance.entity.Category;
 import zw.co.onlinebooks.bookshop.persistance.repo.BookRepository;
@@ -14,7 +14,6 @@ import zw.co.onlinebooks.bookshop.service.BookService;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ public class BookServiceImpl implements BookService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Book createBook(BookDto bookDto) {
+    public Book createBook(BookRequestDto bookRequestDto) {
         /*log.info("Adding new Book: {}", bookDto);
 
         Category category = categoryRepository.findCategoryById(bookDto.getCategoryId());
@@ -44,12 +43,12 @@ public class BookServiceImpl implements BookService {
 
             // Create a new Book object with the given details
             Book book = new Book();
-            book.setTitle(bookDto.getTitle());
-            book.setDescription(bookDto.getDescription());
-            book.setPrice(bookDto.getPrice());
+            book.setTitle(bookRequestDto.getTitle());
+            book.setDescription(bookRequestDto.getDescription());
+            book.setPrice(bookRequestDto.getPrice());
 
             // Find the Category entity with the given category ID (assuming you have a CategoryRepository)
-            Category category = categoryRepository.findById(bookDto.getCategoryId())
+            Category category = categoryRepository.findById(bookRequestDto.getCategoryId())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
             book.setCategory(category);
 
@@ -58,10 +57,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book updateBook(Long id, BookDto bookDto) throws BookException {
-        Category category = categoryRepository.findCategoryById(bookDto.getCategoryId());
+    public Book updateBook(Long id, BookRequestDto bookRequestDto) throws BookException {
+        Category category = categoryRepository.findCategoryById(bookRequestDto.getCategoryId());
         if (Objects.isNull(category)) {
-            String message = "Category ID: " + bookDto.getCategoryId() + " not found";
+            String message = "Category ID: " + bookRequestDto.getCategoryId() + " not found";
             log.info(message);
             throw new CategoryException(message);
         }
@@ -76,9 +75,9 @@ public class BookServiceImpl implements BookService {
 
         updatedBook.setId(id);
         updatedBook.setCategory(category);
-        updatedBook.setPrice(bookDto.getPrice());
-        updatedBook.setDescription(bookDto.getDescription());
-        updatedBook.setTitle(bookDto.getTitle());
+        updatedBook.setPrice(bookRequestDto.getPrice());
+        updatedBook.setDescription(bookRequestDto.getDescription());
+        updatedBook.setTitle(bookRequestDto.getTitle());
         return bookRepository.save(updatedBook);
     }
 

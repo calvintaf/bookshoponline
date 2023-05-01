@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import zw.co.onlinebooks.bookshop.model.CategoryDto;
+import zw.co.onlinebooks.bookshop.model.CategoryRequestDto;
 import zw.co.onlinebooks.bookshop.persistance.entity.Category;
 import zw.co.onlinebooks.bookshop.service.CategoryService;
 
@@ -24,8 +24,8 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public Category createCategory(@RequestBody CategoryDto categoryDto) {
-        return categoryService.createCategory(categoryDto);
+    public Category createCategory(@RequestBody CategoryRequestDto categoryRequestDto) {
+        return categoryService.createCategory(categoryRequestDto);
     }
 
     @GetMapping
@@ -34,7 +34,7 @@ public class CategoryController {
     }
 
     @PutMapping("/categoryId")
-    public Category updateCategory(@PathVariable Long categoryId, @RequestBody CategoryDto categoryDto) {
-        return categoryService.updateCategory(categoryId, categoryDto.getTitle());
+    public Category updateCategory(@PathVariable Long categoryId, @RequestBody CategoryRequestDto categoryRequestDto) {
+        return categoryService.updateCategory(categoryId, categoryRequestDto.getTitle());
     }
 }

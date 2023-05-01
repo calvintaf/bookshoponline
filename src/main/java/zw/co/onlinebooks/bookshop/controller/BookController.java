@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import zw.co.onlinebooks.bookshop.exceptions.BookException;
-import zw.co.onlinebooks.bookshop.model.BookDto;
+import zw.co.onlinebooks.bookshop.model.BookRequestDto;
 import zw.co.onlinebooks.bookshop.persistance.entity.Book;
 import zw.co.onlinebooks.bookshop.service.BookService;
 
@@ -26,8 +26,8 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public Book createBook(@RequestBody BookDto bookDto) {
-        return bookService.createBook(bookDto);
+    public Book createBook(@RequestBody BookRequestDto bookRequestDto) {
+        return bookService.createBook(bookRequestDto);
     }
 
     @GetMapping("/{bookId}")
@@ -46,8 +46,8 @@ public class BookController {
     }
 
     @PutMapping("/{bookId}")
-    public Book updateBook(@PathVariable Long bookId, @RequestBody BookDto bookDto) throws BookException {
-        return bookService.updateBook(bookId, bookDto);
+    public Book updateBook(@PathVariable Long bookId, @RequestBody BookRequestDto bookRequestDto) throws BookException {
+        return bookService.updateBook(bookId, bookRequestDto);
     }
 
     @DeleteMapping("/{bookId}")

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import zw.co.onlinebooks.bookshop.exceptions.CategoryException;
-import zw.co.onlinebooks.bookshop.model.CategoryDto;
+import zw.co.onlinebooks.bookshop.model.CategoryRequestDto;
 import zw.co.onlinebooks.bookshop.persistance.entity.Category;
 import zw.co.onlinebooks.bookshop.persistance.repo.CategoryRepository;
 import zw.co.onlinebooks.bookshop.service.CategoryService;
@@ -21,18 +21,18 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Category createCategory(CategoryDto categoryDto) {
-        log.info("Adding new Category: {}", categoryDto);
+    public Category createCategory(CategoryRequestDto categoryRequestDto) {
+        log.info("Adding new Category: {}", categoryRequestDto);
 
-        Category category = categoryRepository.findByTitle(categoryDto.getTitle().toUpperCase(Locale.ROOT));
+        Category category = categoryRepository.findByTitle(categoryRequestDto.getTitle().toUpperCase(Locale.ROOT));
         if (!Objects.isNull(category)) {
-            String message = "Category with Title: " + categoryDto.getTitle().toUpperCase(Locale.ROOT) + " already exists";
+            String message = "Category with Title: " + categoryRequestDto.getTitle().toUpperCase(Locale.ROOT) + " already exists";
             log.error(message);
             throw new CategoryException(message);
         }
 
         Category newCategory = new Category();
-        newCategory.setTitle(categoryDto.getTitle().toUpperCase(Locale.ROOT));
+        newCategory.setTitle(categoryRequestDto.getTitle().toUpperCase(Locale.ROOT));
         return categoryRepository.save(newCategory);
     }
 
