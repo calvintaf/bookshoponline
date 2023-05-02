@@ -58,7 +58,8 @@ public class BookController {
     }
 
     @DeleteMapping("/{bookId}")
-    public ResponseEntity<BookResponseDto> removeBook(@PathVariable Long bookId) throws BookException {
-        return new ResponseEntity<>(bookService.remove(bookId), HttpStatus.OK);
+    public ResponseEntity<String> removeBook(@PathVariable Long bookId) throws BookException {
+        bookService.remove(bookId);
+        return ResponseEntity.status(HttpStatus.OK).body("Deleted");
     }
 }
