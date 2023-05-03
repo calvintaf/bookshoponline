@@ -63,3 +63,4 @@ NB The rest of the CRUD operation functionalities can be found on the Swagger en
 1. Secure endpoints using OAuth 2.0 authentication.
 2. Implementing Kafka stream or Active MQ queue to enable offline transactions to the external Purchase API.
 3. Deploy the application in a docker container and also have a persistent database setup in a docker container (postgres).
+4. Increase Test Coverage
