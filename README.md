@@ -40,26 +40,26 @@ grant all privileges on database bookshop to postgres;
 
 After the application is run, the database tables populate with dummy data, adding multiple categories and books
 
-##Checking health of the APIs
+## Checking health of the APIs
 
 Spring Actuator is implemented to monitor health of the application and endpoints
 
-###Sample endpoints to use 
+### Sample endpoints to use 
 
 Check overall health : http://localhost:8080/actuator/health
 
-##Endpoint documentation
+## Endpoint documentation
 
 Documentation for the endpoints has been done using Swagger.
 
 Swagger endpoint : http://localhost:8080/swagger-ui/index.html
 
-##How to operate
+## How to operate
 1. Create a Category using the endpoint documented here : http://localhost:8080/swagger-ui/index.html#/category-controller/createCategoryUsingPOST
 2. Add a Book using the categoryId returned above using the endpoint documented here : http://localhost:8080/swagger-ui/index.html#/book-controller/createBookUsingPOST
 NB The rest of the CRUD operation functionalities can be found on the Swagger endpoint.
 
-##Future developments
+## Future developments
 1. Secure endpoints using OAuth 2.0 authentication.
 2. Implementing Kafka stream or Active MQ queue to enable offline transactions to the external Purchase API.
 3. Deploy the application in a docker container and also have a persistent database setup in a docker container (postgres).
