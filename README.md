@@ -1,4 +1,4 @@
-#ZSS Book Shop Application Assignment
+# ZSS Book Shop Application Assignment
 
 The web service allows users to manage books in categories. The service exposes REST APIs to add, update, fetch, load and filter books and categories. The REST API accepts and provides JSON for all endpoints.
 
