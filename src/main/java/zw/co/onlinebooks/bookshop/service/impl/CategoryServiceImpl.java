@@ -79,6 +79,6 @@ public class CategoryServiceImpl implements CategoryService {
             log.info(message);
             throw new CategoryException(message);
         }
-        return new CategoryResponseDto(categoryRepository.getReferenceById(categoryId));
+        return new CategoryResponseDto(categoryRepository.findTopById(categoryId));
     }
 }
