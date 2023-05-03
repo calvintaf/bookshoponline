@@ -106,9 +106,9 @@ public class BookServiceImpl implements BookService {
     public List<BookResponseDto> getAllBooks() {
         log.info("Getting all books");
 
-        List<Book> books = bookRepository.findAll();
-        return books.stream()
-                .map(book -> modelMapper.map(book, BookResponseDto.class))
+        return bookRepository.findAll()
+                .stream()
+                .map(BookResponseDto::new)
                 .collect(Collectors.toList());
     }
 
@@ -130,9 +130,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookResponseDto> getAvailableBooks() {
         log.info("Getting all available books");
-        List<Book> books = bookRepository.findAllByIsAvailable(true);
-        return books.stream()
-                .map(book -> modelMapper.map(book, BookResponseDto.class))
+
+        return bookRepository.findAllByIsAvailable(true)
+                .stream()
+                .map(BookResponseDto::new)
                 .collect(Collectors.toList());
     }
 }
