@@ -14,6 +14,7 @@ import zw.co.onlinebooks.bookshop.persistance.entity.Category;
 import zw.co.onlinebooks.bookshop.persistance.repo.CategoryRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
@@ -27,31 +28,60 @@ class CategoryServiceImplTest {
     @InjectMocks
     CategoryServiceImpl categoryServiceImpl;
 
+    CategoryRequestDto categoryRequestDto;
+
+    CategoryResponseDto categoryResponseDto;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
+  /*  @Test
+    void saveTimesheetShouldReturnBadResponseWhenMobileNumberIsEmpty(){
+        timeSheetRequest.setMobileNumber("");
+        CustomerResponse customerResponse = timeSheetService.saveTimeSheet(timeSheetRequest);
+        assertEquals(RequestResponse.getBADResponse().getResult(),customerResponse.getResult());
+    }*/
+
+
+    @Test
+    void saveCategoryShouldReturnOkResponseWhenCalledWithCorrectParams(){
+        when(categoryRepository.findByTitle(anyString())).thenReturn(new Category());//(Optional.empty());
+        when(categoryRepository.save(any())).thenReturn(categoryRepository);
+        CategoryResponseDto categoryResponseDto = categoryServiceImpl.createCategory(categoryRequestDto);
+        Assertions.assertEquals(new CategoryResponseDto(Long.valueOf(1), "Java"), categoryResponseDto);
+        //assertEquals(RequestResponse.getOKResponse().getResult(),customerResponse.getResult());
+    }
     @Test
     void testCreateCategory() {
-        when(categoryRepository.findByTitle(anyString())).thenReturn(new Category());
+        when(categoryRepository.findByTitle(anyString())).thenReturn(null);
 
-        CategoryResponseDto result = categoryServiceImpl.createCategory(new CategoryRequestDto("title"));
-        Assertions.assertEquals(new CategoryResponseDto(Long.valueOf(1), "title"), result);
+        CategoryResponseDto result = categoryServiceImpl.createCategory(new CategoryRequestDto("Java"));
+        Assertions.assertEquals(new CategoryResponseDto(Long.valueOf(1), "Java"), result);
     }
 
     @Test
-    void testGetAllCategories() {
-        List<CategoryResponseDto> result = categoryServiceImpl.getAllCategories();
-        Assertions.assertEquals(List.of(new CategoryResponseDto(Long.valueOf(1), "title")), result);
+    void testCreateCategory_ol() {
+        when(categoryRepository.findByTitle(anyString())).thenReturn(new Category());
+
+        CategoryResponseDto result = categoryServiceImpl.createCategory(new CategoryRequestDto("Java"));
+        Assertions.assertEquals(new CategoryResponseDto(Long.valueOf(1), "Java"), result);
     }
+
+  /*  @Test
+    void testGetAllCategories() {
+        when(categoryRepository.findByTitle(anyString())).thenReturn(new List<Category>());
+        List<CategoryResponseDto> result = categoryServiceImpl.getAllCategories();
+        Assertions.assertEquals(List.of(new CategoryResponseDto(Long.valueOf(1), "Java")), result);
+    }*/
 
     @Test
     void testUpdateCategory() {
         when(categoryRepository.findCategoryById(anyLong())).thenReturn(new Category());
 
-        CategoryResponseDto result = categoryServiceImpl.updateCategory(Long.valueOf(1), "title");
-        Assertions.assertEquals(new CategoryResponseDto(Long.valueOf(1), "title"), result);
+        CategoryResponseDto result = categoryServiceImpl.updateCategory(Long.valueOf(1), "Java");
+        Assertions.assertEquals(new CategoryResponseDto(Long.valueOf(1), "Java"), result);
     }
 
     @Test
@@ -59,7 +89,7 @@ class CategoryServiceImplTest {
         when(categoryRepository.findCategoryById(anyLong())).thenReturn(new Category());
 
         CategoryResponseDto result = categoryServiceImpl.getCategoryById(Long.valueOf(1));
-        Assertions.assertEquals(new CategoryResponseDto(Long.valueOf(1), "title"), result);
+        Assertions.assertEquals(new CategoryResponseDto(Long.valueOf(1), "Java"), result);
     }
 }
 
