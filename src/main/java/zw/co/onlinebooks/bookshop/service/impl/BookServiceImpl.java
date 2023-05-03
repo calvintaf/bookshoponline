@@ -105,7 +105,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookResponseDto> getAllBooks() {
         log.info("Getting all books");
-
         return bookRepository.findAll()
                 .stream()
                 .map(BookResponseDto::new)
@@ -115,22 +114,16 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookResponseDto> getBooksByCategoryId(Long categoryId) throws BookException {
         log.info("Getting books with Category ID : " + categoryId);
-        List<Book> books = bookRepository.findAllByCategoryId(categoryId);
-        if (books.isEmpty()) {
-            String message = "Books with Category ID: " + categoryId + " not found";
-            log.info(message);
-            throw new BookException(message);
-        }
-        return books.stream()
-                .map(book -> modelMapper.map(book, BookResponseDto.class))
+        return bookRepository.findAllByCategoryId(categoryId).stream()
+                .map(BookResponseDto::new)
                 .collect(Collectors.toList());
-    }
 
+
+    }
 
     @Override
     public List<BookResponseDto> getAvailableBooks() {
         log.info("Getting all available books");
-
         return bookRepository.findAllByIsAvailable(true)
                 .stream()
                 .map(BookResponseDto::new)
