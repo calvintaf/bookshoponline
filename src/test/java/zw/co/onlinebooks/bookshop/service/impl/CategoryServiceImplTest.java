@@ -35,7 +35,6 @@ public class CategoryServiceImplTest {
     @MockBean
     private ModelMapper modelMapper;
 
-
     private String title = "Science";
     private Long id = 123L;
 
