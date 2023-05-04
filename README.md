@@ -15,9 +15,9 @@ The web service was implemented based on the Model-View-Controller(MVC) architec
 |Database            |      Postgres           |
 
 ## Prerequisites
-- JDK 11
-- SpringBoot 2.5.2
-- Maven 3
+- JDK 11+
+- SpringBoot 2.5.2+
+- Maven 3+
 - Postman
 
 ## Assumptions
