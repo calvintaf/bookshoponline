@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import zw.co.onlinebooks.bookshop.exceptions.BookException;
 import zw.co.onlinebooks.bookshop.exceptions.CategoryException;
 import zw.co.onlinebooks.bookshop.model.CategoryRequestDto;
@@ -21,6 +22,7 @@ import zw.co.onlinebooks.bookshop.service.CategoryService;
 
 import java.util.List;
 
+@RestControllerAdvice
 @RestController
 @RequiredArgsConstructor
 @Slf4j

@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import zw.co.onlinebooks.bookshop.exceptions.BookException;
 import zw.co.onlinebooks.bookshop.model.BookRequestDto;
 import zw.co.onlinebooks.bookshop.model.BookResponseDto;
 import zw.co.onlinebooks.bookshop.service.BookService;
 
+
 import java.util.List;
 
+@RestControllerAdvice
 @RestController
 @RequiredArgsConstructor
 @Slf4j
