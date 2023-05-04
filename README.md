@@ -63,8 +63,9 @@ NB The rest of the CRUD operation functionalities can be found on the Swagger en
 1. The ability to purchase a book by integrating with the Purchase API is not completed due to partial documentation and the unavailability of the API from my end : https://lab.v.co.zw/interview. 
 
 ## Future developments
-1. Add book quantity property to book object.
-2. Secure endpoints using OAuth 2.0 authentication.
-3. Implementing Kafka stream or Active MQ queue to enable offline transactions to the external Purchase API.
-4. Deploy the application in a Docker container and also have a persistent database setup in a Docker container (Postgres).
-5. Increase Test Coverage
+1. Customise Controller Advice Error codes to enable better synchronization with the front-end.
+2. Add book quantity property to book object.
+3. Secure endpoints using OAuth 2.0 authentication.
+4. Implementing Kafka stream or Active MQ queue to enable offline transactions to the external Purchase API.
+5. Deploy the application in a Docker container and also have a persistent database setup in a Docker container (Postgres).
+6. Increase Test coverage
