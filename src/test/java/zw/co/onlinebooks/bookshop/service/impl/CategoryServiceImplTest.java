@@ -35,6 +35,10 @@ public class CategoryServiceImplTest {
     @MockBean
     private ModelMapper modelMapper;
 
+
+    private String title = "Science";
+    private Long id = 123L;
+
     @Test
     void createCategorySuccess() {
         Category category = getCategory();
@@ -42,14 +46,14 @@ public class CategoryServiceImplTest {
         Category category1 = getCategory();
         when(this.categoryRepository.save((Category) any())).thenReturn(category);
         when(this.categoryRepository.findByTitle((String) any())).thenReturn(category1);
-        assertThrows(CategoryException.class, () -> this.categoryServiceImpl.createCategory(new CategoryRequestDto("Science")));
+        assertThrows(CategoryException.class, () -> this.categoryServiceImpl.createCategory(new CategoryRequestDto(title)));
         verify(this.categoryRepository).findByTitle((String) any());
     }
 
     private Category getCategory() {
         Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Science");
+        category.setId(id);
+        category.setTitle(title);
         return category;
     }
 
@@ -58,7 +62,7 @@ public class CategoryServiceImplTest {
         when(this.categoryRepository.save((Category) any())).thenThrow(new CategoryException("Adding new Category: {}"));
         when(this.categoryRepository.findByTitle((String) any()))
                 .thenThrow(new CategoryException("Adding new Category: {}"));
-        assertThrows(CategoryException.class, () -> this.categoryServiceImpl.createCategory(new CategoryRequestDto("Science")));
+        assertThrows(CategoryException.class, () -> this.categoryServiceImpl.createCategory(new CategoryRequestDto(title)));
         verify(this.categoryRepository).findByTitle((String) any());
     }
 
@@ -102,9 +106,9 @@ public class CategoryServiceImplTest {
         Category category1 = getCategory();
         when(this.categoryRepository.save((Category) any())).thenReturn(category1);
         when(this.categoryRepository.findCategoryById((Long) any())).thenReturn(category);
-        CategoryResponseDto actualUpdateCategoryResult = this.categoryServiceImpl.updateCategory(123L, "Science");
-        assertEquals(123L, actualUpdateCategoryResult.getId().longValue());
-        assertEquals("Science", actualUpdateCategoryResult.getTitle());
+        CategoryResponseDto actualUpdateCategoryResult = this.categoryServiceImpl.updateCategory(id, title);
+        assertEquals(id, actualUpdateCategoryResult.getId().longValue());
+        assertEquals(title, actualUpdateCategoryResult.getTitle());
         verify(this.categoryRepository).save((Category) any());
         verify(this.categoryRepository).findCategoryById((Long) any());
     }
@@ -114,7 +118,7 @@ public class CategoryServiceImplTest {
         Category category = getCategory();
         when(this.categoryRepository.save((Category) any())).thenThrow(new CategoryException("Updating Category: {}"));
         when(this.categoryRepository.findCategoryById((Long) any())).thenReturn(category);
-        assertThrows(CategoryException.class, () -> this.categoryServiceImpl.updateCategory(123L, "Science"));
+        assertThrows(CategoryException.class, () -> this.categoryServiceImpl.updateCategory(id, title));
         verify(this.categoryRepository).save((Category) any());
         verify(this.categoryRepository).findCategoryById((Long) any());
     }

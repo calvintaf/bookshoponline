@@ -44,6 +44,12 @@ class BookServiceImplTest {
     @MockBean
     private ModelMapper modelMapper;
 
+    private Long id = 123L;
+    private String title = "Java";
+    private String strPrice = "42";
+    private Long price = 42L;
+    private String description = "Best Description";
+
     @Test
     void createBookSuccess() {
         Category category = getCategory();
@@ -53,20 +59,20 @@ class BookServiceImplTest {
 
         Book book = getBook1(category1);
         book.setIsAvailable(true);
-        BigDecimal valueOfResult = BigDecimal.valueOf(42L);
+        BigDecimal valueOfResult = BigDecimal.valueOf(price);
         book.setPrice(valueOfResult);
 
         when(this.bookRepository.save((Book) any())).thenReturn(book);
         BookResponseDto actualCreateBookResult = this.bookServiceImpl.createBook(new BookRequestDto());
-        assertEquals("Java", actualCreateBookResult.getTitle());
-        assertEquals("Best Description", actualCreateBookResult.getDescription());
+        assertEquals(title, actualCreateBookResult.getTitle());
+        assertEquals(description, actualCreateBookResult.getDescription());
         BigDecimal price = actualCreateBookResult.getPrice();
         assertSame(valueOfResult, price);
-        assertEquals(123L, actualCreateBookResult.getId().longValue());
-        assertEquals("42", price.toString());
+        assertEquals(id, actualCreateBookResult.getId().longValue());
+        assertEquals(strPrice, price.toString());
         CategoryResponseDto categoryResponseDto = actualCreateBookResult.getCategoryResponseDto();
-        assertEquals("Java", categoryResponseDto.getTitle());
-        assertEquals(123L, categoryResponseDto.getId().longValue());
+        assertEquals(title, categoryResponseDto.getTitle());
+        assertEquals(id, categoryResponseDto.getId().longValue());
         verify(this.categoryRepository).findCategoryById((Long) any());
         verify(this.bookRepository).save((Book) any());
     }
@@ -74,16 +80,16 @@ class BookServiceImplTest {
     private Book getBook1(Category category1) {
         Book book = new Book();
         book.setCategory(category1);
-        book.setDescription("Best Description");
-        book.setId(123L);
-        book.setTitle("Java");
+        book.setDescription(description);
+        book.setId(id);
+        book.setTitle(title);
         return book;
     }
 
     private Category getCategory() {
         Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Java");
+        category.setId(id);
+        category.setTitle(title);
         return category;
     }
 
@@ -106,26 +112,26 @@ class BookServiceImplTest {
 
         Book book = getBook1(category1);
         book.setIsAvailable(true);
-        BigDecimal valueOfResult = BigDecimal.valueOf(42L);
+        BigDecimal valueOfResult = BigDecimal.valueOf(price);
         book.setPrice(valueOfResult);
 
         Category category2 = getCategory();
 
         Book book1 = getBook1(category2);
         book1.setIsAvailable(true);
-        book1.setPrice(BigDecimal.valueOf(42L));
+        book1.setPrice(BigDecimal.valueOf(price));
         when(this.bookRepository.save((Book) any())).thenReturn(book1);
         when(this.bookRepository.findBookById((Long) any())).thenReturn(book);
-        BookResponseDto actualUpdateBookResult = this.bookServiceImpl.updateBook(123L, new BookRequestDto());
-        assertEquals("Java", actualUpdateBookResult.getTitle());
-        assertEquals("Best Description", actualUpdateBookResult.getDescription());
+        BookResponseDto actualUpdateBookResult = this.bookServiceImpl.updateBook(id, new BookRequestDto());
+        assertEquals(title, actualUpdateBookResult.getTitle());
+        assertEquals(description, actualUpdateBookResult.getDescription());
         BigDecimal price = actualUpdateBookResult.getPrice();
         assertEquals(valueOfResult, price);
-        assertEquals(123L, actualUpdateBookResult.getId().longValue());
-        assertEquals("42", price.toString());
+        assertEquals(id, actualUpdateBookResult.getId().longValue());
+        assertEquals(strPrice, price.toString());
         CategoryResponseDto categoryResponseDto = actualUpdateBookResult.getCategoryResponseDto();
-        assertEquals("Java", categoryResponseDto.getTitle());
-        assertEquals(123L, categoryResponseDto.getId().longValue());
+        assertEquals(title, categoryResponseDto.getTitle());
+        assertEquals(id, categoryResponseDto.getId().longValue());
         verify(this.categoryRepository).findCategoryById((Long) any());
         verify(this.bookRepository).save((Book) any());
         verify(this.bookRepository).findBookById((Long) any());
@@ -140,10 +146,10 @@ class BookServiceImplTest {
 
         Book book = getBook1(category1);
         book.setIsAvailable(true);
-        book.setPrice(BigDecimal.valueOf(42L));
+        book.setPrice(BigDecimal.valueOf(price));
         when(this.bookRepository.save((Book) any())).thenThrow(new CategoryException("foo"));
         when(this.bookRepository.findBookById((Long) any())).thenReturn(book);
-        assertThrows(CategoryException.class, () -> this.bookServiceImpl.updateBook(123L, new BookRequestDto()));
+        assertThrows(CategoryException.class, () -> this.bookServiceImpl.updateBook(id, new BookRequestDto()));
         verify(this.categoryRepository).findCategoryById((Long) any());
         verify(this.bookRepository).save((Book) any());
         verify(this.bookRepository).findBookById((Long) any());
@@ -155,26 +161,26 @@ class BookServiceImplTest {
 
         Book book = getBook1(category);
         book.setIsAvailable(true);
-        BigDecimal valueOfResult = BigDecimal.valueOf(42L);
+        BigDecimal valueOfResult = BigDecimal.valueOf(price);
         book.setPrice(valueOfResult);
 
         Category category1 = getCategory();
 
         Book book1 = getBook1(category1);
         book1.setIsAvailable(true);
-        book1.setPrice(BigDecimal.valueOf(42L));
+        book1.setPrice(BigDecimal.valueOf(price));
         when(this.bookRepository.save((Book) any())).thenReturn(book1);
         when(this.bookRepository.findBookById((Long) any())).thenReturn(book);
-        BookResponseDto actualRemoveResult = this.bookServiceImpl.remove(123L);
-        assertEquals("Java", actualRemoveResult.getTitle());
-        assertEquals("Best Description", actualRemoveResult.getDescription());
+        BookResponseDto actualRemoveResult = this.bookServiceImpl.remove(id);
+        assertEquals(title, actualRemoveResult.getTitle());
+        assertEquals(description, actualRemoveResult.getDescription());
         BigDecimal price = actualRemoveResult.getPrice();
         assertEquals(valueOfResult, price);
-        assertEquals(123L, actualRemoveResult.getId().longValue());
-        assertEquals("42", price.toString());
+        assertEquals(id, actualRemoveResult.getId().longValue());
+        assertEquals(strPrice, price.toString());
         CategoryResponseDto categoryResponseDto = actualRemoveResult.getCategoryResponseDto();
-        assertEquals("Java", categoryResponseDto.getTitle());
-        assertEquals(123L, categoryResponseDto.getId().longValue());
+        assertEquals(title, categoryResponseDto.getTitle());
+        assertEquals(id, categoryResponseDto.getId().longValue());
         verify(this.bookRepository).save((Book) any());
         verify(this.bookRepository).findBookById((Long) any());
     }
@@ -185,10 +191,10 @@ class BookServiceImplTest {
 
         Book book = getBook1(category);
         book.setIsAvailable(true);
-        book.setPrice(BigDecimal.valueOf(42L));
+        book.setPrice(BigDecimal.valueOf(price));
         when(this.bookRepository.save((Book) any())).thenThrow(new CategoryException("foo"));
         when(this.bookRepository.findBookById((Long) any())).thenReturn(book);
-        assertThrows(CategoryException.class, () -> this.bookServiceImpl.remove(123L));
+        assertThrows(CategoryException.class, () -> this.bookServiceImpl.remove(id));
         verify(this.bookRepository).save((Book) any());
         verify(this.bookRepository).findBookById((Long) any());
     }
@@ -199,19 +205,19 @@ class BookServiceImplTest {
 
         Book book = getBook1(category);
         book.setIsAvailable(true);
-        BigDecimal valueOfResult = BigDecimal.valueOf(42L);
+        BigDecimal valueOfResult = BigDecimal.valueOf(price);
         book.setPrice(valueOfResult);
         when(this.bookRepository.findBookById((Long) any())).thenReturn(book);
-        BookResponseDto actualBookById = this.bookServiceImpl.getBookById(123L);
-        assertEquals("Java", actualBookById.getTitle());
-        assertEquals("Best Description", actualBookById.getDescription());
+        BookResponseDto actualBookById = this.bookServiceImpl.getBookById(id);
+        assertEquals(title, actualBookById.getTitle());
+        assertEquals(description, actualBookById.getDescription());
         BigDecimal price = actualBookById.getPrice();
         assertSame(valueOfResult, price);
-        assertEquals(123L, actualBookById.getId().longValue());
-        assertEquals("42", price.toString());
+        assertEquals(id, actualBookById.getId().longValue());
+        assertEquals(strPrice, price.toString());
         CategoryResponseDto categoryResponseDto = actualBookById.getCategoryResponseDto();
-        assertEquals("Java", categoryResponseDto.getTitle());
-        assertEquals(123L, categoryResponseDto.getId().longValue());
+        assertEquals(title, categoryResponseDto.getTitle());
+        assertEquals(id, categoryResponseDto.getId().longValue());
         verify(this.bookRepository).findBookById((Long) any());
     }
 
@@ -221,14 +227,14 @@ class BookServiceImplTest {
         Category category = getCategory();
 
         Book book = getBook1(category);
-        book.setPrice(BigDecimal.valueOf(42L));
+        book.setPrice(BigDecimal.valueOf(price));
         book.setIsAvailable(true);
 
         Category category1 = getCategory();
 
         Book book1 = getBook1(category1);
         book1.setIsAvailable(true);
-        BigDecimal valueOfResult = BigDecimal.valueOf(42L);
+        BigDecimal valueOfResult = BigDecimal.valueOf(price);
         book1.setPrice(valueOfResult);
 
 
@@ -239,26 +245,26 @@ class BookServiceImplTest {
         List<BookResponseDto> actualAllBooks = this.bookServiceImpl.getAllBooks();
         assertEquals(2, actualAllBooks.size());
         BookResponseDto getResult = actualAllBooks.get(0);
-        assertEquals("Java", getResult.getTitle());
+        assertEquals(title, getResult.getTitle());
         BookResponseDto getResult1 = actualAllBooks.get(1);
-        assertEquals("Java", getResult1.getTitle());
+        assertEquals(title, getResult1.getTitle());
         BigDecimal price = getResult1.getPrice();
         assertEquals(valueOfResult, price);
-        assertEquals(123L, getResult1.getId().longValue());
-        assertEquals(123L, getResult.getId().longValue());
+        assertEquals(id, getResult1.getId().longValue());
+        assertEquals(id, getResult.getId().longValue());
         BigDecimal price1 = getResult.getPrice();
         assertEquals(price, price1);
-        assertEquals("Best Description", getResult.getDescription());
+        assertEquals(description, getResult.getDescription());
         CategoryResponseDto categoryResponseDto = getResult.getCategoryResponseDto();
         CategoryResponseDto categoryResponseDto1 = getResult1.getCategoryResponseDto();
         assertEquals(categoryResponseDto, categoryResponseDto1);
-        assertEquals("Best Description", getResult1.getDescription());
-        assertEquals("Java", categoryResponseDto1.getTitle());
-        assertEquals(123L, categoryResponseDto1.getId().longValue());
-        assertEquals("42", price1.toString());
-        assertEquals(123L, categoryResponseDto.getId().longValue());
-        assertEquals("42", price.toString());
-        assertEquals("Java", categoryResponseDto.getTitle());
+        assertEquals(description, getResult1.getDescription());
+        assertEquals(title, categoryResponseDto1.getTitle());
+        assertEquals(id, categoryResponseDto1.getId().longValue());
+        assertEquals(strPrice, price1.toString());
+        assertEquals(id, categoryResponseDto.getId().longValue());
+        assertEquals(strPrice, price.toString());
+        assertEquals(title, categoryResponseDto.getTitle());
         verify(this.bookRepository).findAll();
     }
 
@@ -268,31 +274,31 @@ class BookServiceImplTest {
 
         Book book = getBook1(category);
         book.setIsAvailable(true);
-        BigDecimal valueOfResult = BigDecimal.valueOf(42L);
+        BigDecimal valueOfResult = BigDecimal.valueOf(price);
         book.setPrice(valueOfResult);
 
         ArrayList<Book> bookList = new ArrayList<>();
         bookList.add(book);
         when(this.bookRepository.findAllByCategoryId((Long) any())).thenReturn(bookList);
-        List<BookResponseDto> actualBooksByCategoryId = this.bookServiceImpl.getBooksByCategoryId(123L);
+        List<BookResponseDto> actualBooksByCategoryId = this.bookServiceImpl.getBooksByCategoryId(id);
         assertEquals(1, actualBooksByCategoryId.size());
         BookResponseDto getResult = actualBooksByCategoryId.get(0);
-        assertEquals("Java", getResult.getTitle());
-        assertEquals("Best Description", getResult.getDescription());
+        assertEquals(title, getResult.getTitle());
+        assertEquals(description, getResult.getDescription());
         BigDecimal price = getResult.getPrice();
         assertSame(valueOfResult, price);
-        assertEquals(123L, getResult.getId().longValue());
-        assertEquals("42", price.toString());
+        assertEquals(id, getResult.getId().longValue());
+        assertEquals(strPrice, price.toString());
         CategoryResponseDto categoryResponseDto = getResult.getCategoryResponseDto();
-        assertEquals("Java", categoryResponseDto.getTitle());
-        assertEquals(123L, categoryResponseDto.getId().longValue());
+        assertEquals(title, categoryResponseDto.getTitle());
+        assertEquals(id, categoryResponseDto.getId().longValue());
         verify(this.bookRepository).findAllByCategoryId((Long) any());
     }
 
     @Test
     void getBooksByCategoryIdThrowsCategoryException() throws BookException {
         when(this.bookRepository.findAllByCategoryId((Long) any())).thenThrow(new CategoryException("foo"));
-        assertThrows(CategoryException.class, () -> this.bookServiceImpl.getBooksByCategoryId(123L));
+        assertThrows(CategoryException.class, () -> this.bookServiceImpl.getBooksByCategoryId(id));
         verify(this.bookRepository).findAllByCategoryId((Long) any());
     }
 
@@ -302,13 +308,13 @@ class BookServiceImplTest {
 
         Book book = getBook1(category);
         book.setIsAvailable(true);
-        book.setPrice(BigDecimal.valueOf(42L));
+        book.setPrice(BigDecimal.valueOf(price));
 
         Category category1 = getCategory();
 
         Book book1 = getBook1(category1);
         book1.setIsAvailable(true);
-        BigDecimal valueOfResult = BigDecimal.valueOf(42L);
+        BigDecimal valueOfResult = BigDecimal.valueOf(price);
         book1.setPrice(valueOfResult);
 
 
@@ -316,29 +322,29 @@ class BookServiceImplTest {
         bookList.add(book1);
         bookList.add(book);
         when(this.bookRepository.findAllByCategoryId((Long) any())).thenReturn(bookList);
-        List<BookResponseDto> actualBooksByCategoryId = this.bookServiceImpl.getBooksByCategoryId(123L);
+        List<BookResponseDto> actualBooksByCategoryId = this.bookServiceImpl.getBooksByCategoryId(id);
         assertEquals(2, actualBooksByCategoryId.size());
         BookResponseDto getResult = actualBooksByCategoryId.get(0);
-        assertEquals("Java", getResult.getTitle());
+        assertEquals(title, getResult.getTitle());
         BookResponseDto getResult1 = actualBooksByCategoryId.get(1);
-        assertEquals("Java", getResult1.getTitle());
+        assertEquals(title, getResult1.getTitle());
         BigDecimal price = getResult1.getPrice();
         assertEquals(valueOfResult, price);
-        assertEquals(123L, getResult1.getId().longValue());
-        assertEquals(123L, getResult.getId().longValue());
+        assertEquals(id, getResult1.getId().longValue());
+        assertEquals(id, getResult.getId().longValue());
         BigDecimal price1 = getResult.getPrice();
         assertEquals(price, price1);
-        assertEquals("Best Description", getResult.getDescription());
+        assertEquals(description, getResult.getDescription());
         CategoryResponseDto categoryResponseDto = getResult.getCategoryResponseDto();
         CategoryResponseDto categoryResponseDto1 = getResult1.getCategoryResponseDto();
         assertEquals(categoryResponseDto, categoryResponseDto1);
-        assertEquals("Best Description", getResult1.getDescription());
-        assertEquals("Java", categoryResponseDto1.getTitle());
-        assertEquals(123L, categoryResponseDto1.getId().longValue());
-        assertEquals("42", price1.toString());
-        assertEquals(123L, categoryResponseDto.getId().longValue());
-        assertEquals("42", price.toString());
-        assertEquals("Java", categoryResponseDto.getTitle());
+        assertEquals(description, getResult1.getDescription());
+        assertEquals(title, categoryResponseDto1.getTitle());
+        assertEquals(id, categoryResponseDto1.getId().longValue());
+        assertEquals(strPrice, price1.toString());
+        assertEquals(id, categoryResponseDto.getId().longValue());
+        assertEquals(strPrice, price.toString());
+        assertEquals(title, categoryResponseDto.getTitle());
         verify(this.bookRepository).findAllByCategoryId((Long) any());
     }
 
@@ -347,7 +353,7 @@ class BookServiceImplTest {
         Category category = getCategory();
 
         Book book = getBook(category);
-        BigDecimal valueOfResult = BigDecimal.valueOf(42L);
+        BigDecimal valueOfResult = BigDecimal.valueOf(price);
         book.setPrice(valueOfResult);
 
         ArrayList<Book> bookList = new ArrayList<>();
@@ -356,27 +362,25 @@ class BookServiceImplTest {
         List<BookResponseDto> actualAvailableBooks = this.bookServiceImpl.getAvailableBooks();
         assertEquals(1, actualAvailableBooks.size());
         BookResponseDto getResult = actualAvailableBooks.get(0);
-        assertEquals("Java", getResult.getTitle());
-        assertEquals("Best Description", getResult.getDescription());
+        assertEquals(title, getResult.getTitle());
+        assertEquals(description, getResult.getDescription());
         BigDecimal price = getResult.getPrice();
         assertSame(valueOfResult, price);
-        assertEquals(123L, getResult.getId().longValue());
-        assertEquals("42", price.toString());
+        assertEquals(id, getResult.getId().longValue());
+        assertEquals(strPrice, price.toString());
         CategoryResponseDto categoryResponseDto = getResult.getCategoryResponseDto();
-        assertEquals("Java", categoryResponseDto.getTitle());
-        assertEquals(123L, categoryResponseDto.getId().longValue());
+        assertEquals(title, categoryResponseDto.getTitle());
+        assertEquals(id, categoryResponseDto.getId().longValue());
         verify(this.bookRepository).findAllByIsAvailable((Boolean) any());
     }
 
     private Book getBook(Category category) {
         Book book = new Book();
         book.setCategory(category);
-        book.setDescription("Best Description");
-        book.setId(123L);
+        book.setDescription(description);
+        book.setId(id);
         book.setIsAvailable(true);
-        book.setTitle("Java");
+        book.setTitle(title);
         return book;
     }
-
-
 }
