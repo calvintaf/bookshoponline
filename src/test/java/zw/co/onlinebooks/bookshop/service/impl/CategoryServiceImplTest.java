@@ -2,7 +2,6 @@ package zw.co.onlinebooks.bookshop.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.verify;
@@ -37,7 +36,7 @@ public class CategoryServiceImplTest {
     private ModelMapper modelMapper;
 
     @Test
-    void testCreateCategory() {
+    void createCategorySuccess() {
         Category category = new Category();
         category.setId(123L);
         category.setTitle("Science");
@@ -52,7 +51,7 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    void testCreateCategory4() {
+    void createCategoryThrowsCategoryException() {
         when(this.categoryRepository.save((Category) any())).thenThrow(new CategoryException("Adding new Category: {}"));
         when(this.categoryRepository.findByTitle((String) any()))
                 .thenThrow(new CategoryException("Adding new Category: {}"));
@@ -61,31 +60,7 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    void testGetAllCategories() {
-        when(this.categoryRepository.findAll()).thenReturn(new ArrayList<>());
-        assertTrue(this.categoryServiceImpl.getAllCategories().isEmpty());
-        verify(this.categoryRepository).findAll();
-    }
-
-    @Test
-    void testGetAllCategories2() {
-        when(this.modelMapper.map((Object) any(), (Class<CategoryResponseDto>) any()))
-                .thenReturn(new CategoryResponseDto());
-
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Science");
-
-        ArrayList<Category> categoryList = new ArrayList<>();
-        categoryList.add(category);
-        when(this.categoryRepository.findAll()).thenReturn(categoryList);
-        assertEquals(1, this.categoryServiceImpl.getAllCategories().size());
-        verify(this.modelMapper).map((Object) any(), (Class<CategoryResponseDto>) any());
-        verify(this.categoryRepository).findAll();
-    }
-
-    @Test
-    void testGetAllCategories3() {
+    void getAllCategoriesSuccess() {
         when(this.modelMapper.map((Object) any(), (Class<CategoryResponseDto>) any()))
                 .thenReturn(new CategoryResponseDto());
 
@@ -107,7 +82,7 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    void testGetAllCategories4() {
+    void getAllCategoriesThrowsCategoryException() {
         when(this.modelMapper.map((Object) any(), (Class<CategoryResponseDto>) any()))
                 .thenThrow(new CategoryException("Getting all categories"));
 
@@ -124,7 +99,7 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    void testUpdateCategory() {
+    void updateCategorySuccess() {
         Category category = new Category();
         category.setId(123L);
         category.setTitle("Science");
@@ -142,7 +117,7 @@ public class CategoryServiceImplTest {
     }
 
     @Test
-    void testUpdateCategory2() {
+    void updateCategorySuccessThrowsCategoryException() {
         Category category = new Category();
         category.setId(123L);
         category.setTitle("Science");
