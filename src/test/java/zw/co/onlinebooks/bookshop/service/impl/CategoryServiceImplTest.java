@@ -37,17 +37,20 @@ public class CategoryServiceImplTest {
 
     @Test
     void createCategorySuccess() {
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Science");
+        Category category = getCategory();
 
-        Category category1 = new Category();
-        category1.setId(123L);
-        category1.setTitle("Science");
+        Category category1 = getCategory();
         when(this.categoryRepository.save((Category) any())).thenReturn(category);
         when(this.categoryRepository.findByTitle((String) any())).thenReturn(category1);
         assertThrows(CategoryException.class, () -> this.categoryServiceImpl.createCategory(new CategoryRequestDto("Science")));
         verify(this.categoryRepository).findByTitle((String) any());
+    }
+
+    private Category getCategory() {
+        Category category = new Category();
+        category.setId(123L);
+        category.setTitle("Science");
+        return category;
     }
 
     @Test
@@ -64,13 +67,9 @@ public class CategoryServiceImplTest {
         when(this.modelMapper.map((Object) any(), (Class<CategoryResponseDto>) any()))
                 .thenReturn(new CategoryResponseDto());
 
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Science");
+        Category category = getCategory();
 
-        Category category1 = new Category();
-        category1.setId(123L);
-        category1.setTitle("Science");
+        Category category1 = getCategory();
 
         ArrayList<Category> categoryList = new ArrayList<>();
         categoryList.add(category1);
@@ -86,9 +85,7 @@ public class CategoryServiceImplTest {
         when(this.modelMapper.map((Object) any(), (Class<CategoryResponseDto>) any()))
                 .thenThrow(new CategoryException("Getting all categories"));
 
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Science");
+        Category category = getCategory();
 
         ArrayList<Category> categoryList = new ArrayList<>();
         categoryList.add(category);
@@ -100,13 +97,9 @@ public class CategoryServiceImplTest {
 
     @Test
     void updateCategorySuccess() {
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Science");
+        Category category = getCategory();
 
-        Category category1 = new Category();
-        category1.setId(123L);
-        category1.setTitle("Science");
+        Category category1 = getCategory();
         when(this.categoryRepository.save((Category) any())).thenReturn(category1);
         when(this.categoryRepository.findCategoryById((Long) any())).thenReturn(category);
         CategoryResponseDto actualUpdateCategoryResult = this.categoryServiceImpl.updateCategory(123L, "Science");
@@ -118,9 +111,7 @@ public class CategoryServiceImplTest {
 
     @Test
     void updateCategorySuccessThrowsCategoryException() {
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Science");
+        Category category = getCategory();
         when(this.categoryRepository.save((Category) any())).thenThrow(new CategoryException("Updating Category: {}"));
         when(this.categoryRepository.findCategoryById((Long) any())).thenReturn(category);
         assertThrows(CategoryException.class, () -> this.categoryServiceImpl.updateCategory(123L, "Science"));

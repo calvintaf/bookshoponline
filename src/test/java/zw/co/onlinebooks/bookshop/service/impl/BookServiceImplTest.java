@@ -3,7 +3,6 @@ package zw.co.onlinebooks.bookshop.service.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -42,25 +41,21 @@ class BookServiceImplTest {
     @MockBean
     private CategoryRepository categoryRepository;
 
+    @MockBean
+    private ModelMapper modelMapper;
+
     @Test
     void createBookSuccess() {
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Java");
+        Category category = getCategory();
         when(this.categoryRepository.findCategoryById((Long) any())).thenReturn(category);
 
-        Category category1 = new Category();
-        category1.setId(123L);
-        category1.setTitle("Java");
+        Category category1 = getCategory();
 
-        Book book = new Book();
-        book.setCategory(category1);
-        book.setDescription("Best Description");
-        book.setId(123L);
+        Book book = getBook1(category1);
         book.setIsAvailable(true);
         BigDecimal valueOfResult = BigDecimal.valueOf(42L);
         book.setPrice(valueOfResult);
-        book.setTitle("Java");
+
         when(this.bookRepository.save((Book) any())).thenReturn(book);
         BookResponseDto actualCreateBookResult = this.bookServiceImpl.createBook(new BookRequestDto());
         assertEquals("Java", actualCreateBookResult.getTitle());
@@ -76,11 +71,25 @@ class BookServiceImplTest {
         verify(this.bookRepository).save((Book) any());
     }
 
-    @Test
-    void createBookShouldThrowCategoryException() {
+    private Book getBook1(Category category1) {
+        Book book = new Book();
+        book.setCategory(category1);
+        book.setDescription("Best Description");
+        book.setId(123L);
+        book.setTitle("Java");
+        return book;
+    }
+
+    private Category getCategory() {
         Category category = new Category();
         category.setId(123L);
         category.setTitle("Java");
+        return category;
+    }
+
+    @Test
+    void createBookShouldThrowCategoryException() {
+        Category category = getCategory();
         when(this.categoryRepository.findCategoryById((Long) any())).thenReturn(category);
         when(this.bookRepository.save((Book) any())).thenThrow(new CategoryException("Adding new Book: {}"));
         assertThrows(CategoryException.class, () -> this.bookServiceImpl.createBook(new BookRequestDto()));
@@ -90,35 +99,21 @@ class BookServiceImplTest {
 
     @Test
     void updateBookSuccess() throws BookException {
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Java");
+        Category category = getCategory();
         when(this.categoryRepository.findCategoryById((Long) any())).thenReturn(category);
 
-        Category category1 = new Category();
-        category1.setId(123L);
-        category1.setTitle("Java");
+        Category category1 = getCategory();
 
-        Book book = new Book();
-        book.setCategory(category1);
-        book.setDescription("Best Description");
-        book.setId(123L);
+        Book book = getBook1(category1);
         book.setIsAvailable(true);
         BigDecimal valueOfResult = BigDecimal.valueOf(42L);
         book.setPrice(valueOfResult);
-        book.setTitle("Java");
 
-        Category category2 = new Category();
-        category2.setId(123L);
-        category2.setTitle("Java");
+        Category category2 = getCategory();
 
-        Book book1 = new Book();
-        book1.setCategory(category2);
-        book1.setDescription("Best Description");
-        book1.setId(123L);
+        Book book1 = getBook1(category2);
         book1.setIsAvailable(true);
         book1.setPrice(BigDecimal.valueOf(42L));
-        book1.setTitle("Java");
         when(this.bookRepository.save((Book) any())).thenReturn(book1);
         when(this.bookRepository.findBookById((Long) any())).thenReturn(book);
         BookResponseDto actualUpdateBookResult = this.bookServiceImpl.updateBook(123L, new BookRequestDto());
@@ -138,22 +133,14 @@ class BookServiceImplTest {
 
     @Test
     void updateBookThrowsCategoryException() throws BookException {
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Java");
+        Category category = getCategory();
         when(this.categoryRepository.findCategoryById((Long) any())).thenReturn(category);
 
-        Category category1 = new Category();
-        category1.setId(123L);
-        category1.setTitle("Java");
+        Category category1 = getCategory();
 
-        Book book = new Book();
-        book.setCategory(category1);
-        book.setDescription("Best Description");
-        book.setId(123L);
+        Book book = getBook1(category1);
         book.setIsAvailable(true);
         book.setPrice(BigDecimal.valueOf(42L));
-        book.setTitle("Java");
         when(this.bookRepository.save((Book) any())).thenThrow(new CategoryException("foo"));
         when(this.bookRepository.findBookById((Long) any())).thenReturn(book);
         assertThrows(CategoryException.class, () -> this.bookServiceImpl.updateBook(123L, new BookRequestDto()));
@@ -164,30 +151,18 @@ class BookServiceImplTest {
 
     @Test
     void removeBookSuccess() throws BookException {
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Java");
+        Category category = getCategory();
 
-        Book book = new Book();
-        book.setCategory(category);
-        book.setDescription("Best Description");
-        book.setId(123L);
+        Book book = getBook1(category);
         book.setIsAvailable(true);
         BigDecimal valueOfResult = BigDecimal.valueOf(42L);
         book.setPrice(valueOfResult);
-        book.setTitle("Java");
 
-        Category category1 = new Category();
-        category1.setId(123L);
-        category1.setTitle("Java");
+        Category category1 = getCategory();
 
-        Book book1 = new Book();
-        book1.setCategory(category1);
-        book1.setDescription("Best Description");
-        book1.setId(123L);
+        Book book1 = getBook1(category1);
         book1.setIsAvailable(true);
         book1.setPrice(BigDecimal.valueOf(42L));
-        book1.setTitle("Java");
         when(this.bookRepository.save((Book) any())).thenReturn(book1);
         when(this.bookRepository.findBookById((Long) any())).thenReturn(book);
         BookResponseDto actualRemoveResult = this.bookServiceImpl.remove(123L);
@@ -206,17 +181,11 @@ class BookServiceImplTest {
 
     @Test
     void removeBookThrowsCategoryException() throws BookException {
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Java");
+        Category category = getCategory();
 
-        Book book = new Book();
-        book.setCategory(category);
-        book.setDescription("Best Description");
-        book.setId(123L);
+        Book book = getBook1(category);
         book.setIsAvailable(true);
         book.setPrice(BigDecimal.valueOf(42L));
-        book.setTitle("Java");
         when(this.bookRepository.save((Book) any())).thenThrow(new CategoryException("foo"));
         when(this.bookRepository.findBookById((Long) any())).thenReturn(book);
         assertThrows(CategoryException.class, () -> this.bookServiceImpl.remove(123L));
@@ -226,18 +195,12 @@ class BookServiceImplTest {
 
     @Test
     void getBookByIdSuccess() throws BookException {
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Java");
+        Category category = getCategory();
 
-        Book book = new Book();
-        book.setCategory(category);
-        book.setDescription("Best Description");
-        book.setId(123L);
+        Book book = getBook1(category);
         book.setIsAvailable(true);
         BigDecimal valueOfResult = BigDecimal.valueOf(42L);
         book.setPrice(valueOfResult);
-        book.setTitle("Java");
         when(this.bookRepository.findBookById((Long) any())).thenReturn(book);
         BookResponseDto actualBookById = this.bookServiceImpl.getBookById(123L);
         assertEquals("Java", actualBookById.getTitle());
@@ -255,30 +218,19 @@ class BookServiceImplTest {
 
     @Test
     void getAllBooksSuccess() {
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Java");
+        Category category = getCategory();
 
-        Book book = new Book();
-        book.setCategory(category);
-        book.setDescription("Best Description");
-        book.setId(123L);
-        book.setIsAvailable(true);
+        Book book = getBook1(category);
         book.setPrice(BigDecimal.valueOf(42L));
-        book.setTitle("Java");
+        book.setIsAvailable(true);
 
-        Category category1 = new Category();
-        category1.setId(123L);
-        category1.setTitle("Java");
+        Category category1 = getCategory();
 
-        Book book1 = new Book();
-        book1.setCategory(category1);
-        book1.setDescription("Best Description");
-        book1.setId(123L);
+        Book book1 = getBook1(category1);
         book1.setIsAvailable(true);
         BigDecimal valueOfResult = BigDecimal.valueOf(42L);
         book1.setPrice(valueOfResult);
-        book1.setTitle("Java");
+
 
         ArrayList<Book> bookList = new ArrayList<>();
         bookList.add(book1);
@@ -312,18 +264,12 @@ class BookServiceImplTest {
 
     @Test
     void getBooksByCategoryIdSuccess() throws BookException {
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Java");
+        Category category = getCategory();
 
-        Book book = new Book();
-        book.setCategory(category);
-        book.setDescription("Best Description");
-        book.setId(123L);
+        Book book = getBook1(category);
         book.setIsAvailable(true);
         BigDecimal valueOfResult = BigDecimal.valueOf(42L);
         book.setPrice(valueOfResult);
-        book.setTitle("Java");
 
         ArrayList<Book> bookList = new ArrayList<>();
         bookList.add(book);
@@ -352,30 +298,19 @@ class BookServiceImplTest {
 
     @Test
     void getMultipleBooksByCategoryIdSuccess() throws BookException {
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Java");
+        Category category = getCategory();
 
-        Book book = new Book();
-        book.setCategory(category);
-        book.setDescription("Best Description");
-        book.setId(123L);
+        Book book = getBook1(category);
         book.setIsAvailable(true);
         book.setPrice(BigDecimal.valueOf(42L));
-        book.setTitle("Java");
 
-        Category category1 = new Category();
-        category1.setId(123L);
-        category1.setTitle("Java");
+        Category category1 = getCategory();
 
-        Book book1 = new Book();
-        book1.setCategory(category1);
-        book1.setDescription("Best Description");
-        book1.setId(123L);
+        Book book1 = getBook1(category1);
         book1.setIsAvailable(true);
         BigDecimal valueOfResult = BigDecimal.valueOf(42L);
         book1.setPrice(valueOfResult);
-        book1.setTitle("Java");
+
 
         ArrayList<Book> bookList = new ArrayList<>();
         bookList.add(book1);
@@ -409,18 +344,11 @@ class BookServiceImplTest {
 
     @Test
     void getAvailableBooksSuccess() {
-        Category category = new Category();
-        category.setId(123L);
-        category.setTitle("Java");
+        Category category = getCategory();
 
-        Book book = new Book();
-        book.setCategory(category);
-        book.setDescription("Best Description");
-        book.setId(123L);
-        book.setIsAvailable(true);
+        Book book = getBook(category);
         BigDecimal valueOfResult = BigDecimal.valueOf(42L);
         book.setPrice(valueOfResult);
-        book.setTitle("Java");
 
         ArrayList<Book> bookList = new ArrayList<>();
         bookList.add(book);
@@ -439,4 +367,16 @@ class BookServiceImplTest {
         assertEquals(123L, categoryResponseDto.getId().longValue());
         verify(this.bookRepository).findAllByIsAvailable((Boolean) any());
     }
+
+    private Book getBook(Category category) {
+        Book book = new Book();
+        book.setCategory(category);
+        book.setDescription("Best Description");
+        book.setId(123L);
+        book.setIsAvailable(true);
+        book.setTitle("Java");
+        return book;
+    }
+
+
 }
